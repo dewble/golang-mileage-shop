@@ -30,13 +30,13 @@ func newBuyer() *buyer { // 포인터 구조체를 반환함
 }
 
 // item 구조체, buyer 구조체 사용
-func buying(itm []item, byr *buyer, itmchoice int, dlt []delivery,d chan bool, numbuy *int, temp map[string]int) {
+func buying(itm []item, byr *buyer, itmchoice int, dlt []delivery, d chan bool, numbuy *int, temp map[string]int) {
 	// numbuy 를 이용하여 배송 한도를 관리한다
 
 	// panic(), recover(), defer() - 프로그램이 바로 종료되지 않게 하기 위함
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("\n", r, "\n")
+			fmt.Println(r, "\n")
 		}
 	}()
 
@@ -100,7 +100,7 @@ func buying(itm []item, byr *buyer, itmchoice int, dlt []delivery,d chan bool, n
 				fmt.Println("상품이 장바구니에 추가되었습니다.")
 				break // 구매 for문을 빠져나감
 			} else {
-				fmt.Println("잘못된 입력입니다. 다시 입력해주세요.\n")
+				fmt.Println("잘못된 입력입니다. 다시 입력해주세요.")
 			}
 		}
 	}
@@ -137,7 +137,7 @@ func requiredPoint(itm []item, byr *buyer) (canbuy bool) {
 	fmt.Println("보유 마일리지 :", byr.point)
 	fmt.Println()
 	if byr.point < bucketpoint {
-		fmt.Println("마일리지가 %d점 부족합니다.", bucketpoint-byr.point)
+		fmt.Printf("마일리지가 %d점 부족합니다.", bucketpoint-byr.point)
 		return false
 	}
 	return true
@@ -150,7 +150,7 @@ func excessAmount(itm []item, byr *buyer) (canbuy bool) {
 		for i := 0; i < len(itm); i++ {
 			if itm[i].name == index { // itm[i] 에 물품명 입력
 				if itm[i].amount < val { // 장바구니의 물품 총 개수가 판매하는 물품 개수보다 클때
-					fmt.Println("%s, %d개 초과", itm[i].name, val-itm[i].amount)
+					fmt.Printf("%s, %d개 초과", itm[i].name, val-itm[i].amount)
 					return false
 				}
 			}
@@ -160,7 +160,7 @@ func excessAmount(itm []item, byr *buyer) (canbuy bool) {
 }
 
 // 주문 기능
-func bucketBuying(itm []item, byr *buyer, numbuy *int,temp map[string]int , d chan bool) {
+func bucketBuying(itm []item, byr *buyer, numbuy *int, temp map[string]int, d chan bool) {
 	// 품목의 수량을 장바구니 수량만큼 차감하고 수용자 포인트도 차감했다면 장바구니를 초기화하고 주문 접수
 	// numbuy 를 이용하여 배송 한도를 관리한다
 	defer func() { // 함수 내에서 장바구니의 물품이 존재하지 않는데 주문할 경우 panic으로 발생시키고 복구
@@ -257,7 +257,7 @@ func main() {
 	deliverylist := make([]delivery, 5) // 배송 중인 상품 목록
 
 	deliverystart := make(chan bool) // 주문 시작 신호 송수신 채널
-	
+
 	for i := 0; i < 5; i++ { // 배송 상품 객체 5개 생성
 		deliverylist[i] = newDelivery()
 	}
@@ -324,7 +324,7 @@ func main() {
 					buying(items, buyer, itemchoice, deliverylist, deliverystart, &numbuy, tempdelivery)
 					break
 				} else {
-					fmt.Println("잘못된 입력입니다. 다시 입력해주세요.\n")
+					fmt.Printf("잘못된 입력입니다. 다시 입력해주세요.\n")
 				}
 			}
 
@@ -411,8 +411,7 @@ func main() {
 
 			return // main함수 종료
 		} else {
-			fmt.Println("잘못된 입력입니다. 다시 입력해주세요.\n")
+			fmt.Printf("잘못된 입력입니다. 다시 입력해주세요.\n")
 		}
 	}
 }
-
